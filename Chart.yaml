@@ -1,0 +1,25 @@
+apiVersion: v2
+name: shop
+description: Helm chart для развертывания интернет-магазина на микросервисах
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+dependencies:
+  - name: order
+    version: 0.1.0
+    repository: file://./charts/order
+  - name: billing
+    version: 0.1.0
+    repository: file://./charts/billing
+  - name: notification
+    version: 0.1.0
+    repository: file://./charts/notification
+  - name: postgres
+    version: 0.1.0
+    repository: file://./charts/postgres
+  - name: rabbitmq
+    version: 0.1.0
+    repository: file://./charts/rabbitmq
+  - name: mailhog
+    version: 0.1.0
+    repository: file://./charts/mailhog 

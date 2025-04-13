@@ -1,0 +1,97 @@
+{{- if .Values.global.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ingress
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: {{ .Values.global.ingress.host }}
+      http:
+        paths:
+          # Notification service routes
+          - path: /api/v1/notifications
+            pathType: Prefix
+            backend:
+              service:
+                name: notification-service
+                port:
+                  number: {{ .Values.notification.service.port }}
+          - path: /api/v1/users/[0-9]+/notifications
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: notification-service
+                port:
+                  number: {{ .Values.notification.service.port }}
+                  
+          # Billing service routes
+          - path: /api/v1/billing/account
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: {{ .Values.billing.service.port }}
+          - path: /api/v1/billing/deposit
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: {{ .Values.billing.service.port }}
+          - path: /api/v1/billing/withdraw
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: {{ .Values.billing.service.port }}
+          - path: /api/v1/billing
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: {{ .Values.billing.service.port }}
+          - path: /api/v1/accounts
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: {{ .Values.billing.service.port }}
+          
+          # Order service routes
+          - path: /api/v1/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: {{ .Values.order.service.port }}
+          - path: /api/v1/orders
+            pathType: Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: {{ .Values.order.service.port }}
+          - path: /api/v1/users/[0-9]+/orders
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: {{ .Values.order.service.port }}
+          - path: /api/v1/users
+            pathType: Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: {{ .Values.order.service.port }}
+{{- end }} 
